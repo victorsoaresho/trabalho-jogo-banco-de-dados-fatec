@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="form-container" v-if="isLogin">
+        <h1>Login</h1>
+        <form @submit.prevent="handleLogin">
+          <input type="email" v-model="email" placeholder="Email" required>
+          <input type="password" v-model="password" placeholder="Senha" required>
+          <button type="submit">Entrar</button>
+        </form>
+        <p>Não tem uma conta? <span @click="toggleForm">Cadastre-se</span></p>
+      </div>
+
+      <div class="form-container" v-else>
+        <h1>Cadastro</h1>
+        <form @submit.prevent="handleRegister">
+          <input type="email" v-model="email" placeholder="Email" required>
+          <input type="password" v-model="password" placeholder="Senha" required>
+          <button type="submit">Cadastrar</button>
+        </form>
+        <p>Já tem uma conta? <span @click="toggleForm">Entrar</span></p>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>
