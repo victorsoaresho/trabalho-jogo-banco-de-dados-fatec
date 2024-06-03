@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Pool } = require('pg');
-const path = require('path');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,9 +14,6 @@ const dbConfig = {
   }
 };
 const pool = new Pool(dbConfig);
-
-// Servir arquivos estáticos do diretório 'public'
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Endpoint de login
 app.post('/login', async (req, res) => {
@@ -50,7 +46,7 @@ app.post('/iniciarPartida', async (req, res) => {
   const { vidaHeroi, vidaVilao, ultimaAcao } = req.body;
   try {
     const result = await pool.query(
-      'INSERT INTO jogo (vida_heroi, vida_vilao, ultima_acao) VALUES ($1, $2, $3) RETURNING id',
+      'INSERT INTO jogo (vida_heroi, vida_vilao, ultima_acoa) VALUES ($1, $2, $3) RETURNING id',
       [vidaHeroi, vidaVilao, ultimaAcao]
     );
     const partidaId = result.rows[0].id;
@@ -66,7 +62,7 @@ app.post('/atualizarVida', async (req, res) => {
   const { partidaId, vidaHeroi, vidaVilao, ultimaAcao } = req.body;
   try {
     await pool.query(
-      'UPDATE jogo SET vida_heroi = $1, vida_vilao = $2, ultima_acao = $3 WHERE id = $4',
+      'UPDATE jogo SET vida_heroi = $1, vida_vilao = $2, ultima_acoa = $3 WHERE id = $4',
       [vidaHeroi, vidaVilao, ultimaAcao, partidaId]
     );
     res.status(200).send('Vida atualizada com sucesso.');
@@ -90,14 +86,14 @@ app.delete('/deletarPartida', async (req, res) => {
 // Endpoint para obter os dados da última ação
 app.get('/ultimaAcao', async (req, res) => {
   try {
-    const result = await pool.query('SELECT vida_heroi, vida_vilao, ultima_acao FROM jogo ORDER BY id DESC LIMIT 1');
+    const result = await pool.query('SELECT vida_heroi, vida_vilao, ultima_acoa FROM jogo ORDER BY id DESC LIMIT 1');
     if (result.rows.length > 0) {
       const ultimaAcao = result.rows[0];
       res.json({
         success: true,
         vidaHeroi: ultimaAcao.vida_heroi,
         vidaVilao: ultimaAcao.vida_vilao,
-        ultimaAcao: ultimaAcao.ultima_acao
+        ultimaAcao: ultimaAcao.ultima_acoa
       });
     } else {
       res.json({ success: false, message: 'Nenhuma ação encontrada.' });
@@ -105,11 +101,6 @@ app.get('/ultimaAcao', async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: 'Erro no servidor' });
   }
-});
-
-// Servir o index.html como página inicial
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
