@@ -80,6 +80,9 @@ Este projeto é um jogo simples onde um herói e um vilão se enfrentam. O siste
 ### Dashboard
 ![Dashboard](https://github.com/victorsoaresho/trabalho-jogo-banco-de-dados-fatec/assets/136899628/f4781940-aba3-412e-b0bc-764e6113fdd4)
 
+## Link:
+Não consegui achar um host que suportasse o backend de forma gratuita, mas deixei as chaves do banco no arquivo para que você consiga acessar de forma local
+
 ## Licença
 
 Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
