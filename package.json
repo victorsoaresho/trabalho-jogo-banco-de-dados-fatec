@@ -1,10 +1,11 @@
 {
   "name": "web-banco",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Projeto de Jogo Herói e Vilão com backend em Node.js e frontend em Vue.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "build": "echo 'Nenhum passo de build necessário'"
   },
   "keywords": [],
   "author": "",
@@ -17,5 +18,8 @@
     "pg": "^8.11.5",
     "socket.io": "^4.7.5",
     "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^4.5.0"
   }
 }
