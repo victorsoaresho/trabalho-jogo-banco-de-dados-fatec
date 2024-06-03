@@ -13,7 +13,7 @@ body, html {
     text-align: center;
 }
 
-.personagem {
+.personagem, #log-acoes {
     background-color: white;
     border: 2px solid #1d509f;
     margin-bottom: 20px;
@@ -46,6 +46,11 @@ button:active {
     transform: translateY(2px);
 }
 
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 .barra-vida {
     height: 30px;
     background-color: #4CAF50;
@@ -62,4 +67,23 @@ button:active {
     margin-bottom: 20px;
     background-color: #ddd;
     border-radius: 5px;
+}
+
+.reiniciar {
+    margin-top: 20px;
+}
+
+#log-acoes {
+    background-color: white;
+    border: 2px solid #1d509f;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px;
+    color: black;
+}
+
+#log-acoes h2 {
+    margin: 0;
+    margin-bottom: 10px;
 }
