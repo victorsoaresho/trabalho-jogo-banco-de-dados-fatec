@@ -18,31 +18,12 @@
                 <div>Vida: {{ vilaoVida }}%</div>
             </div>
         </div>
+        <div class="voltar">
+            <a href="./index.html"><button class="button">Voltar ao jogo</button></a>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                heroiVida: '',
-                vilaoVida: ''
-            },
-            mounted() {
-                this.fetchCharacterData();
-            },
-            methods: {
-                async fetchCharacterData() {
-                    try {
-                        const response = await fetch('http://localhost:3000/characters'); // Substitua pela sua rota da API
-                        const data = await response.json();
-                        this.heroiVida = data.heroi.Vida;
-                        this.vilaoVida = data.vilao.Vida;
-                    } catch (error) {
-                        console.error('Erro ao buscar dados dos personagens:', error);
-                    }
-                }
-            }
-        });
-    </script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>

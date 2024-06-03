@@ -16,6 +16,7 @@
           <input type="password" v-model="password" placeholder="Senha" required>
           <button type="submit">Entrar</button>
         </form>
+        <p v-if="message" class="message">{{ message }}</p>
         <p>Não tem uma conta? <span @click="toggleForm">Cadastre-se</span></p>
       </div>
 
@@ -26,6 +27,7 @@
           <input type="password" v-model="password" placeholder="Senha" required>
           <button type="submit">Cadastrar</button>
         </form>
+        <p v-if="message" class="message">{{ message }}</p>
         <p>Já tem uma conta? <span @click="toggleForm">Entrar</span></p>
       </div>
     </div>
