@@ -1,5 +1,5 @@
 const { createApp } = Vue;
-const socket = io();
+const API_URL = 'http://localhost:5000';
 
 createApp({
     data() {
@@ -9,29 +9,29 @@ createApp({
         };
     },
     mounted() {
-        this.fetchLatestGameData();
+        this.fetchLatestData();
         this.setupSocket();
     },
     methods: {
-        async fetchLatestGameData() {
+        async fetchLatestData() {
             try {
-                const response = await fetch('http://localhost:5000/ultimaAcao');
+                const response = await fetch(`${API_URL}/ultimaAcao`);
                 const data = await response.json();
                 if (data.success) {
                     this.heroiVida = data.vidaHeroi;
                     this.vilaoVida = data.vidaVilao;
                 } else {
-                    console.error('Erro ao buscar os dados da última ação:', data.message);
+                    console.error('Erro ao buscar a última ação:', data.message);
                 }
             } catch (error) {
-                console.error('Erro ao buscar dados da última ação:', error);
+                console.error('Erro ao buscar dados do banco de dados:', error);
             }
         },
         setupSocket() {
+            const socket = io();
             socket.on('atualizarVida', (data) => {
                 this.heroiVida = data.vidaHeroi;
-                this.vilaoVida = data.vidaVilao;
-                this.fetchLatestGameData();
+                this.vilaoVida = data.vilaoVida;
             });
         }
     }
