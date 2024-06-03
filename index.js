@@ -75,53 +75,71 @@ createApp({
                 console.error('Erro ao deletar a partida:', error);
             }
         },
-        atacar(isHeroi) {
+        async atacar(isHeroi) {
             if (isHeroi) {
                 this.vilao.vida -= 10;
                 const acao = "Herói atacou o vilão (-10 vida)";
                 this.logAcoes.push(acao);
-                this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
+                await this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
                 if (this.verificarFimDeJogo()) return;
-                this.acaoVilao();
+                await this.acaoVilao();  // Garante que o vilão reaja após a ação do herói
             } else {
                 this.heroi.vida -= 20;
                 const acao = "Vilão atacou o herói (-20 vida)";
                 this.logAcoes.push(acao);
-                this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
+                await this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
                 this.verificarFimDeJogo();
             }
         },
-        defender(isHeroi) {
+        async defender(isHeroi) {
             const acao = isHeroi ? "Herói defendeu" : "Vilão defendeu";
             this.logAcoes.push(acao);
-            this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
-            this.acaoVilao();
+            await this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
+            if (isHeroi) {
+                await this.acaoVilao();  // Garante que o vilão reaja após a ação do herói
+            }
         },
-        usarPocao(isHeroi) {
+        async usarPocao(isHeroi) {
             if (isHeroi) {
                 this.heroi.vida = Math.min(this.heroi.vida + 10, 100);
                 const acao = "Herói usou uma poção (+10 vida)";
                 this.logAcoes.push(acao);
-                this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
+                await this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
                 if (this.verificarFimDeJogo()) return;
-                this.acaoVilao();
+                await this.acaoVilao();  // Garante que o vilão reaja após a ação do herói
             } else {
                 this.vilao.vida = Math.min(this.vilao.vida + 10, 100);
                 const acao = "Vilão usou uma poção (+10 vida)";
                 this.logAcoes.push(acao);
-                this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
+                await this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
             }
         },
-        correr(isHeroi) {
+        async correr(isHeroi) {
             const acao = isHeroi ? "Herói tentou correr" : "Vilão tentou correr";
             this.logAcoes.push(acao);
-            this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
-            this.acaoVilao();
+            await this.atualizarVidaNoBancoDeDados(this.heroi.vida, this.vilao.vida, acao);
+            if (isHeroi) {
+                await this.acaoVilao();  // Garante que o vilão reaja após a ação do herói
+            }
         },
-        acaoVilao() {
+        async acaoVilao() {
+            if (this.jogoAcabou) return;
             const acoes = ['atacar', 'defender', 'usarPocao', 'correr'];
             const acao = acoes[Math.floor(Math.random() * acoes.length)];
-            this[acao](false);
+            switch (acao) {
+                case 'atacar':
+                    await this.atacar(false);
+                    break;
+                case 'defender':
+                    await this.defender(false);
+                    break;
+                case 'usarPocao':
+                    await this.usarPocao(false);
+                    break;
+                case 'correr':
+                    await this.correr(false);
+                    break;
+            }
         },
         verificarFimDeJogo() {
             if (this.heroi.vida <= 0 || this.vilao.vida <= 0) {

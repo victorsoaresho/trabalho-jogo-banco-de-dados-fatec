@@ -46,7 +46,7 @@ app.post('/iniciarPartida', async (req, res) => {
   const { vidaHeroi, vidaVilao, ultimaAcao } = req.body;
   try {
     const result = await pool.query(
-      'INSERT INTO jogo (vida_heroi, vida_vilao, ultima_acao) VALUES ($1, $2, $3) RETURNING id',
+      'INSERT INTO jogo (vida_heroi, vida_vilao, ultima_acoa) VALUES ($1, $2, $3) RETURNING id',
       [vidaHeroi, vidaVilao, ultimaAcao]
     );
     const partidaId = result.rows[0].id;
@@ -62,7 +62,7 @@ app.post('/atualizarVida', async (req, res) => {
   const { partidaId, vidaHeroi, vidaVilao, ultimaAcao } = req.body;
   try {
     await pool.query(
-      'UPDATE jogo SET vida_heroi = $1, vida_vilao = $2, ultima_acao = $3 WHERE id = $4',
+      'UPDATE jogo SET vida_heroi = $1, vida_vilao = $2, ultima_acoa = $3 WHERE id = $4',
       [vidaHeroi, vidaVilao, ultimaAcao, partidaId]
     );
     res.status(200).send('Vida atualizada com sucesso.');
@@ -72,29 +72,28 @@ app.post('/atualizarVida', async (req, res) => {
   }
 });
 
-// Endpoint para deletar a partida
+// Endpoint para deletar todas as linhas da tabela jogo
 app.delete('/deletarPartida', async (req, res) => {
-  const { partidaId } = req.body;
   try {
-    await pool.query('DELETE FROM jogo WHERE id = $1', [partidaId]);
-    res.status(200).send('Partida deletada com sucesso.');
+    await pool.query('DELETE FROM jogo');
+    res.status(200).send('Todas as partidas deletadas com sucesso.');
   } catch (err) {
     console.error(err);
-    res.status(500).send('Erro ao deletar a partida.');
+    res.status(500).send('Erro ao deletar as partidas.');
   }
 });
 
 // Endpoint para obter os dados da última ação
 app.get('/ultimaAcao', async (req, res) => {
   try {
-    const result = await pool.query('SELECT vida_heroi, vida_vilao, ultima_acao FROM jogo ORDER BY id DESC LIMIT 1');
+    const result = await pool.query('SELECT vida_heroi, vida_vilao, ultima_acoa FROM jogo ORDER BY id DESC LIMIT 1');
     if (result.rows.length > 0) {
       const ultimaAcao = result.rows[0];
       res.json({
         success: true,
         vidaHeroi: ultimaAcao.vida_heroi,
         vidaVilao: ultimaAcao.vida_vilao,
-        ultimaAcao: ultimaAcao.ultima_acao
+        ultimaAcao: ultimaAcao.ultima_acoa
       });
     } else {
       res.json({ success: false, message: 'Nenhuma ação encontrada.' });
